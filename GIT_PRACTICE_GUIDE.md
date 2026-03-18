@@ -6,6 +6,10 @@ Este laboratorio está diseñado para que múltiples grupos de estudiantes pract
 ## 📋 Pasos para Practicar Git
 
 ### 1. Clonar el Repositorio
+<<<<<<< HEAD
+
+=======
+>>>>>>> 5d6356d1d2404c57b50040af4933f60d0c0891f3
 ```bash
 git clone [URL_DEL_REPOSITORIO]
 cd prueba_estres_devops
