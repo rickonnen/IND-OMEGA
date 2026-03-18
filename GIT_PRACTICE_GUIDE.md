@@ -1,20 +1,21 @@
 # 📚 Git Practice Guide - SOCIAL_IS
 
 ## 🎯 Objetivo del Laboratorio
-
 Este laboratorio está diseñado para que múltiples grupos de estudiantes practiquen **Git Workflow** subiendo publicaciones a una red social simulada.
 
 ## 📋 Pasos para Practicar Git
 
 ### 1. Clonar el Repositorio
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5d6356d1d2404c57b50040af4933f60d0c0891f3
 ```bash
 git clone [URL_DEL_REPOSITORIO]
 cd prueba_estres_devops
 ```
 
 ### 2. Configurar Tu Entorno
-
 ```bash
 # Instalar dependencias
 bun install
@@ -24,18 +25,15 @@ bun run dev:all
 ```
 
 ### 3. Crear Tu Publicación
-
 Edita el archivo: `backend/src/modules/posts/data/posts.json`
 
 **Importante:** Usa un ID único para tu grupo:
-
 - Grupo 1: IDs 2001-2999
-- Grupo 2: IDs 3001-3999
+- Grupo 2: IDs 3001-3999  
 - Grupo 3: IDs 4001-4999
 - etc...
 
 ### 4. Formato de Publicación
-
 ```json
 {
   "id": 2001,
@@ -49,7 +47,6 @@ Edita el archivo: `backend/src/modules/posts/data/posts.json`
 ```
 
 ### 5. Flujo de Git
-
 ```bash
 # 1. Ver estado
 git status
@@ -67,13 +64,11 @@ git push origin [tu-branch]
 ## 🚀 Comandos Útiles
 
 ### Iniciar Servicios:
-
 - `bun run dev:all` - Todos los servicios
 - `bun run dev:back` - Solo backend
 - `bun run dev:front` - Solo frontend
 
 ### Ver Resultados:
-
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:5000
 - Posts API: http://localhost:5000/api/posts
@@ -88,13 +83,11 @@ git push origin [tu-branch]
 ## 🔍 Troubleshooting
 
 ### Si no ves tu post:
-
 - Revisa que el JSON esté bien formateado
 - Verifica que el ID sea único
 - Reinicia el backend: `bun run dev:back`
 
 ### Conflictos de Git:
-
 ```bash
 git pull origin main
 # Resuelve conflictos manualmente
@@ -110,5 +103,4 @@ git push
 - [Bun Docs](https://bun.sh/docs)
 
 ---
-
 **¡Diviértete practicando Git!** 🚀💻

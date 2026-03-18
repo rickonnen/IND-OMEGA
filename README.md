@@ -1,87 +1,110 @@
-# SOCIAL_IS | Expert Monorepo Platform
+# 📦 Next.js TSX DevOps Stress Lab
 
-![Premium UI](https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop)
+Proyecto base para **simulaciones de estrés DevOps**. Incluye:
 
-Bienvenido a **SOCIAL_IS**, un ecosistema de red social de alto nivel gestionado como un **Monorepo** con **Bun Workspaces**. Este proyecto integra una red social premium con un laboratorio de ingeniería DevOps en una sola unidad arquitectónica.
+* Frontend y Backend en **Next.js + TSX** (App Router)
+* API REST simple (`/api/calculator`)
+* Tests con **Bun**
+* Docker para contenedores
+* Scripts de desarrollo y CI/CD listos para pipelines
 
-## 🚀 Vision General
+Este proyecto permite simular: fallos en pipelines, tests rotos, conflictos de merge y despliegues fallidos.
 
-### Características Clave:
+---
 
-- **Monorepo con Bun Workspaces**: Gestión unificada de dependencias y scripts globales para Backend, Frontend y Laboratorio de Estrés.
-- **Expert UI/UX**: Diseño de 3 columnas inspirado en las plataformas líderes mundiales.
-- **DevOps Command Center**: Scripts centralizados en `/scripts` para caos, estrés y simulaciones.
-- **Screaming Architecture**: Organización intuitiva por dominios de negocio.
+## 🗂 Estructura del repositorio
 
-## 🛠️ Stack Tecnológico
-
-- **Runtime & Orchestration**: Bun (Monorepo Workspaces).
-- **Core App**: Next.js 14, Express, TypeScript, Prisma ORM.
-- **Database**: PostgreSQL (Dockerized).
-
-## 📥 Configuración Rápida (Monorepo)
-
-### 1. Requisitos Previos
-
-- [Bun](https://bun.sh/)
-- [Docker](https://www.docker.com/)
-
-### 2. Instalación Global
-
-Desde la raíz del proyecto, instala todas las dependencias de todos los paquetes:
-
-```bash
-bun install
 ```
-
-### 3. Base de Datos
-
-Levanta el contenedor y prepara Prisma desde la raíz:
-
-```bash
-docker-compose up -d
-bun run prisma:generate
-bun run prisma:migrate
-bun run prisma:seed
-```
-
-### 4. Lanzamiento de Servicios
-
-Inicia todo el ecosistema con un solo comando:
-
-```bash
-bun run dev:all
-```
-
-O de forma individual:
-
-- `bun run dev:back`
-- `bun run dev:front`
-- `bun run dev:lab`
-
-## 🧪 DevOps Command Center (`/scripts`)
-
-Este proyecto centraliza sus herramientas de ingeniería en la raíz para un control total:
-
-| Script             | Propósito              | Comando                       |
-| ------------------ | ---------------------- | ----------------------------- |
-| `stress-test.js`   | Prueba de carga masiva | `bun run lab:stress`          |
-| `chaos_devs.sh`    | Inyección de fallos    | `bun run lab:chaos`           |
-| `dev_simulator.sh` | Simulador de tráfico   | `sh scripts/dev_simulator.sh` |
-
-## 🏗️ Estructura del Ecosistema
-
-```text
-social_is/
-├── backend/        # API Core (Screaming Mode)
-├── frontend/       # UI Premium (Next.js 14)
-├── infra/
-│   └── stress-lab/ # Laboratorio de Estrés (Next.js 16)
-├── scripts/        # DevOps Command Center
-├── package.json    # Workspace Config
-└── README.md
+nextjs-stress-lab/
+├── app/
+│   ├── api/calculator/route.ts   # API REST
+│   ├── page.tsx                  # Página principal
+│   └── layout.tsx                # Layout obligatorio
+├── tests/
+│   └── calculator.test.ts        # Tests de funciones
+├── Dockerfile
+├── package.json
+├── bun.lockb
+├── tsconfig.json
+└── .github/workflows/ci.yml      # Pipeline CI/CD
 ```
 
 ---
 
-**Desarrollado con ❤️ por el Equipo de Expertos DevOps SOCIAL_IS** 🚀
+## ⚡ Requisitos
+
+* **Bun** (v1.3+) → [https://bun.sh](https://bun.sh)
+* Git
+* Docker (opcional para pruebas de despliegue)
+
+> No necesitas Node.js, Bun reemplaza todo.
+
+---
+
+## 🚀 Comandos principales
+
+| Acción                | Comando Bun         |
+| --------------------- | ------------------- |
+| Levantar dev server   | `bun run dev`       |
+| Build de producción   | `bun run build`     |
+| Start de producción   | `bun run start`     |
+| Correr tests          | `bun test`          |
+| Instalar dependencias | `bun install`       |
+| Agregar dependencia   | `bun add <package>` |
+
+---
+
+## 🧪 API Example
+
+**Sumar 2 números**:
+
+```
+GET /api/calculator?a=10&b=2&op=add
+```
+
+**Respuesta:**
+
+```json
+{ "result": 12 }
+```
+
+**División:**
+
+```
+GET /api/calculator?a=10&b=2&op=divide
+```
+
+> Maneja errores: divide por 0 o números inválidos → status 400
+
+---
+
+## 🛠 Estructura de pruebas para DevOps
+
+* **DevOps 1**: Infraestructura y Docker, simular despliegues y caídas de servicios
+* **DevOps 2**: Pipelines y tests, inyectar tests rotos o builds fallidos
+* **DevOps 3**: Repositorio y monitoreo, crear PR con conflictos y revisar alertas
+
+---
+
+## 🐳 Docker
+
+Levantar contenedor de desarrollo:
+
+```bash
+docker build -t nextjs-stress-lab .
+docker run -p 3000:3000 nextjs-stress-lab
+```
+
+* Acceder a `http://localhost:3000/`
+* API: `http://localhost:3000/api/calculator`
+
+---
+
+## ✅ Notas finales
+
+* Usa `bun test` para todos los tests; no es necesario configurar Jest manualmente
+* Toda la lógica de API está en `app/api/calculator/route.ts`
+* Layout obligatorio en `app/layout.tsx` para evitar errores de Next.js con App Router
+
+> Este repositorio sirve como **base para construir escenarios de estrés realistas para el equipo de DevOps**.
+
