@@ -26,37 +26,39 @@ export default function BusquedaMapaPage() {
         
         {/* Panel Lateral Colapsable */}
         <aside 
-          className={`
-            bg-white transition-all duration-300 ease-in-out z-10 border-gray-200 overflow-hidden
-            ${isSidebarOpen 
-              ? 'w-full h-[40vh] md:w-[30%] md:h-auto border-b md:border-b-0 md:border-r opacity-100' 
-              : 'w-0 h-0 md:w-0 md:h-auto opacity-0'
-            }
-          `}
-        >
-          <div className={`
-            p-4 h-full overflow-y-auto transition-opacity duration-200
-            ${isSidebarOpen ? 'opacity-100 delay-100' : 'opacity-0'}
-            md:w-[30vw] min-w-[250px]
-          `}>
-            <div className="flex justify-end mb-4">
-              <button 
-                onClick={() => setIsSidebarOpen(false)} 
-                className="md:hidden text-gray-500 hover:text-gray-800 text-sm font-medium"
-              >
-                Cerrar
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              <div className="h-28 bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
-                <div className="h-4 bg-gray-200 w-3/4 mb-3 rounded"></div>
-                <div className="h-4 bg-gray-200 w-1/2 mb-3 rounded"></div>
-                <div className="h-8 bg-gray-100 w-full rounded mt-auto"></div>
-              </div>
-            </div>
-          </div>
-        </aside>
+  className={`
+    bg-white transition-all duration-300 ease-in-out z-10 border-gray-200 overflow-hidden
+    ${isSidebarOpen 
+      ? 'w-full h-[40vh] md:w-[30%] md:h-auto border-b md:border-b-0 md:border-r opacity-100' 
+      : 'w-0 h-0 md:w-0 md:h-auto opacity-0'
+    }
+  `}
+>
+  <div className={`
+    p-4 h-full overflow-y-auto transition-opacity duration-200
+    ${isSidebarOpen ? 'opacity-100 delay-100' : 'opacity-0'}
+    md:w-[30vw] min-w-[250px]
+  `}>
+    {/* Encabezado con el texto y flecha */}
+    <div className="flex items-center gap-2 mb-4">
+      <button 
+        onClick={() => setIsSidebarOpen(false)} 
+        className="flex items-center gap-2 text-gray-700 hover:text-gray-900 font-medium group"
+      >
+        <span className="text-lg">←</span>
+        <span>Lista de inmuebles</span>
+      </button>
+    </div>
+    
+    <div className="space-y-4">
+      <div className="h-28 bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+        <div className="h-4 bg-gray-200 w-3/4 mb-3 rounded"></div>
+        <div className="h-4 bg-gray-200 w-1/2 mb-3 rounded"></div>
+        <div className="h-8 bg-gray-100 w-full rounded mt-auto"></div>
+      </div>
+    </div>
+  </div>
+</aside>
 
         {/* Área del Mapa */}
         <section className="flex-grow bg-gray-100 relative w-full h-[60vh] md:h-auto transition-all duration-300">
