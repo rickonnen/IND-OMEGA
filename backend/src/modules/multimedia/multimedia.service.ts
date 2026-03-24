@@ -2,7 +2,7 @@ import { MULTIMEDIA_RULES } from './multimedia.schemas'
 
 export const isValidYoutubeUrl = (videoUrl: string): boolean => {
   try {
-    const parsedUrl = new URL(videoUrl)
+    const parsedUrl = new URL(videoUrl.trim())
     const host = parsedUrl.hostname.toLowerCase()
 
     if (!MULTIMEDIA_RULES.allowedVideoHosts.includes(host)) {
@@ -13,7 +13,7 @@ export const isValidYoutubeUrl = (videoUrl: string): boolean => {
       return parsedUrl.pathname.length > 1
     }
 
-    if (host.includes('youtube.com')) {
+    if (host === 'youtube.com' || host === 'www.youtube.com') {
       return parsedUrl.searchParams.has('v') || parsedUrl.pathname.startsWith('/shorts/')
     }
 

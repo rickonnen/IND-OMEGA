@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { isValidYoutubeUrl } from './multimedia.service'
-import { MULTIMEDIA_RULES } from './multimedia.schemas'
+import { MULTIMEDIA_RULES, VideoLinkPayload } from './multimedia.schemas'
 
 export const getMultimediaRules = (_req: Request, res: Response) => {
   res.status(200).json({
@@ -10,15 +10,16 @@ export const getMultimediaRules = (_req: Request, res: Response) => {
 }
 
 export const validateVideoLink = (req: Request, res: Response) => {
-  const { videoUrl } = req.body as { videoUrl?: string }
+  const { videoUrl } = req.body as Partial<VideoLinkPayload>
+  const normalizedVideoUrl = videoUrl?.trim()
 
-  if (!videoUrl || typeof videoUrl !== 'string') {
+  if (!normalizedVideoUrl) {
     return res.status(400).json({
       message: 'videoUrl is required',
     })
   }
 
-  const isValid = isValidYoutubeUrl(videoUrl)
+  const isValid = isValidYoutubeUrl(normalizedVideoUrl)
 
   if (!isValid) {
     return res.status(400).json({
@@ -29,7 +30,7 @@ export const validateVideoLink = (req: Request, res: Response) => {
   return res.status(200).json({
     message: 'Valid YouTube video link',
     data: {
-      videoUrl,
+      videoUrl: normalizedVideoUrl,
       provider: 'YouTube',
     },
   })
