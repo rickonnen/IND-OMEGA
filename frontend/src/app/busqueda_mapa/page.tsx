@@ -11,7 +11,7 @@ export default function BusquedaMapaPage() {
 
   return (
     <div className="flex flex-col w-full min-h-[calc(100vh-theme(spacing.32))] border rounded-lg overflow-hidden shadow-sm bg-white">
-      {/* Barra Superior */}
+      {/* Barra Superior  EDITAR PARA LA VERSION DE HU4 */}
       <header className="w-full p-4 border-b border-gray-200 bg-gray-50 shrink-0">
         <h2 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wide">
           Criterios de Búsqueda (Módulo Externo)
@@ -21,6 +21,17 @@ export default function BusquedaMapaPage() {
           <div className="h-10 w-full md:w-1/3 bg-gray-200 rounded animate-pulse"></div>
           <div className="h-10 w-full md:w-1/3 bg-gray-200 rounded animate-pulse"></div>
         </div>
+        {/* Input búsqueda ######### */}
+        <input
+          type="text"
+          placeholder="Buscá por ubicación o palabra clave"
+          className="flex-1 min-w-[200px] h-10 px-3 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+        />
+        {/* Filtros */}
+        <select className="h-10 px-3 border rounded-md text-sm bg-white">
+          <option>Venta</option>
+          <option>Alquiler</option>
+        </select>
       </header>
 
       {/* Contenedor Principal (Resultados y Mapa) */}
