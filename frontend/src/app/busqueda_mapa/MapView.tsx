@@ -10,14 +10,13 @@ import { createGpsIcon } from '@/components/GpsPin'
 import { createClusterIcon, CLUSTER_CONFIG } from '@/lib/clusterIcon'
 import { useProperties } from '@/hooks/useProperties'
 import type { PropertyMapPin } from '@/types/property'
+import type { Filters } from '@/hooks/useFilters'
 
-// Fix íconos default de Leaflet en Next.js
 delete (L.Icon.Default.prototype as any)._getIconUrl
 L.Icon.Default.mergeOptions({
   iconUrl:   'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 })
-
 
 const PIN_FILL: Record<PropertyMapPin['type'], string> = {
   casa:         '#3b82f6',
@@ -33,7 +32,6 @@ const PIN_HALO: Record<PropertyMapPin['type'], string> = {
   local:        'rgba(16,  185, 129, 0.25)',
 }
 
-// Color sólido para el texto del precio en el popup
 const PIN_LABEL: Record<PropertyMapPin['type'], string> = {
   casa:         '#2563eb',
   departamento: '#7c3aed',
@@ -44,7 +42,6 @@ const PIN_LABEL: Record<PropertyMapPin['type'], string> = {
 function createPinIcon(type: PropertyMapPin['type']): L.DivIcon {
   const fill = PIN_FILL[type] ?? '#6b7280'
   const halo = PIN_HALO[type] ?? 'rgba(107,114,128,0.25)'
-
   const outer = 28
   const inner = 20
   const half  = outer / 2
@@ -52,33 +49,9 @@ function createPinIcon(type: PropertyMapPin['type']): L.DivIcon {
   return L.divIcon({
     className: '',
     html: `
-      <div style="
-        width: ${outer}px;
-        height: ${outer}px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      ">
-        <!-- Halo -->
-        <div style="
-          position: absolute;
-          width: ${outer}px;
-          height: ${outer}px;
-          border-radius: 50% 50% 50% 0;
-          transform: rotate(-45deg);
-          background-color: ${halo};
-        "></div>
-        <!-- Gota sólida -->
-        <div style="
-          position: relative;
-          width: ${inner}px;
-          height: ${inner}px;
-          border-radius: 50% 50% 50% 0;
-          transform: rotate(-45deg);
-          background-color: ${fill};
-          border: 2px solid rgba(255,255,255,0.9);
-          box-shadow: 0 1px 4px rgba(0,0,0,0.20);
-        "></div>
+      <div style="width:${outer}px;height:${outer}px;display:flex;align-items:center;justify-content:center;">
+        <div style="position:absolute;width:${outer}px;height:${outer}px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background-color:${halo};"></div>
+        <div style="position:relative;width:${inner}px;height:${inner}px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background-color:${fill};border:2px solid rgba(255,255,255,0.9);box-shadow:0 1px 4px rgba(0,0,0,0.20);"></div>
       </div>
     `,
     iconSize:    [outer, outer],
@@ -98,6 +71,7 @@ interface MapViewProps {
   zoom?: number
   selectedId?: string | null
   onSelect?: (id: string) => void
+  filters?: Filters
 }
 
 export default function MapView({
@@ -105,8 +79,9 @@ export default function MapView({
   zoom = 12,
   selectedId,
   onSelect,
+  filters,
 }: MapViewProps) {
-  const { properties, isLoading, error } = useProperties()
+  const { properties, isLoading, error } = useProperties(filters)
 
   return (
     <div className="relative w-full h-full">
@@ -121,6 +96,12 @@ export default function MapView({
       {error && (
         <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[1000] bg-red-50 border border-red-200 px-4 py-2 rounded-full shadow text-sm text-red-600 pointer-events-none">
           ⚠️ {error}
+        </div>
+      )}
+
+      {!isLoading && !error && properties.length === 0 && (
+        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[1000] bg-white px-4 py-2 rounded-full shadow text-sm text-gray-500 pointer-events-none">
+          No se encontraron propiedades con estos filtros
         </div>
       )}
 
@@ -143,8 +124,8 @@ export default function MapView({
         <Marker position={center} icon={createGpsIcon()}>
           <Popup>Tu ubicación actual</Popup>
         </Marker>
-        
-                <MarkerClusterGroup
+
+        <MarkerClusterGroup
           iconCreateFunction={createClusterIcon}
           maxClusterRadius={CLUSTER_CONFIG.maxClusterRadius}
           disableClusteringAtZoom={CLUSTER_CONFIG.disableClusteringAtZoom}
@@ -158,49 +139,37 @@ export default function MapView({
         >
           {properties.map((property) => {
             const isSelected = property.id === selectedId
-
             return (
               <Marker
                 key={property.id}
                 position={[property.lat, property.lng]}
                 icon={isSelected ? createSelectedIcon() : createPinIcon(property.type)}
-                eventHandlers={{
-                  click: () => onSelect?.(property.id),
-                }}
+                eventHandlers={{ click: () => onSelect?.(property.id) }}
               >
-              <Popup>
-  <div className="text-sm min-w-[180px] max-w-[220px]">
-    <div
-      className="h-1.5 rounded-t mb-2"
-      style={{ backgroundColor: PIN_FILL[property.type] }}
-    />
-    <div className="flex items-center gap-2 mb-1">
-      <span className="text-xl">
-        {property.type === 'casa' && '🏠'}
-        {property.type === 'departamento' && '🏢'}
-        {property.type === 'terreno' && '🌳'}
-        {property.type === 'local' && '🏪'}
-      </span>
-      <p className="font-semibold text-gray-800 leading-tight">
-        {property.title}
-      </p>
-    </div>
-    <p className="font-bold text-lg mb-2" style={{ color: PIN_LABEL[property.type] }}>
-      {formatPrice(property.price, property.currency)}
-    </p>
-    <span
-      className="inline-block text-xs font-medium px-2 py-0.5 rounded-full text-white capitalize"
-      style={{ backgroundColor: PIN_FILL[property.type] }}
-    >
-      {property.type}
-    </span>
-  </div>
-</Popup>
+                <Popup>
+                  <div className="text-sm min-w-[180px] max-w-[220px]">
+                    <div className="h-1.5 rounded-t mb-2" style={{ backgroundColor: PIN_FILL[property.type] }} />
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xl">
+                        {property.type === 'casa' && '🏠'}
+                        {property.type === 'departamento' && '🏢'}
+                        {property.type === 'terreno' && '🌳'}
+                        {property.type === 'local' && '🏪'}
+                      </span>
+                      <p className="font-semibold text-gray-800 leading-tight">{property.title}</p>
+                    </div>
+                    <p className="font-bold text-lg mb-2" style={{ color: PIN_LABEL[property.type] }}>
+                      {formatPrice(property.price, property.currency)}
+                    </p>
+                    <span className="inline-block text-xs font-medium px-2 py-0.5 rounded-full text-white capitalize" style={{ backgroundColor: PIN_FILL[property.type] }}>
+                      {property.type}
+                    </span>
+                  </div>
+                </Popup>
               </Marker>
             )
           })}
         </MarkerClusterGroup>
-
       </MapContainer>
     </div>
   )
@@ -210,31 +179,9 @@ function createSelectedIcon(): L.DivIcon {
   return L.divIcon({
     className: '',
     html: `
-      <div style="
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transform: scale(1.6);
-      ">
-        <div style="
-          width: 34px;
-          height: 34px;
-          border-radius: 50%;
-          background-color: #ef4444;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.35);
-          border: 2px solid white;
-        ">
-          <img 
-            src="/house.svg" 
-            style="
-              width:18px;
-              height:18px;
-              filter: brightness(0) invert(1);
-            " 
-          />
+      <div style="display:flex;align-items:center;justify-content:center;transform:scale(1.6);">
+        <div style="width:34px;height:34px;border-radius:50%;background-color:#ef4444;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.35);border:2px solid white;">
+          <img src="/house.svg" style="width:18px;height:18px;filter:brightness(0) invert(1);" />
         </div>
       </div>
     `,

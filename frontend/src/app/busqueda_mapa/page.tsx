@@ -2,58 +2,68 @@
 
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
+import { useFilters } from '@/hooks/useFilters'
 
 const MapView = dynamic(() => import('./MapView'), { ssr: false })
 
 export default function BusquedaMapaPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null)
+  const { filters, updateFilter, resetFilters, hasActiveFilters } = useFilters()
 
   return (
     <div className="flex flex-col w-full min-h-[calc(100vh-theme(spacing.32))] border rounded-lg overflow-hidden shadow-sm bg-white">
-      {/* Barra Superior  EDITAR PARA LA VERSION DE HU4 */}
+      {/* Barra Superior */}
       <header className="w-full p-4 border-b border-gray-200 bg-gray-50 shrink-0">
         <h2 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wide">
-          Criterios de Búsqueda (Módulo Externo)
+          Criterios de Búsqueda
         </h2>
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="h-10 w-full md:w-1/3 bg-gray-200 rounded animate-pulse"></div>
-          <div className="h-10 w-full md:w-1/3 bg-gray-200 rounded animate-pulse"></div>
-          <div className="h-10 w-full md:w-1/3 bg-gray-200 rounded animate-pulse"></div>
+        <div className="flex flex-col md:flex-row gap-3 flex-wrap">
+          {/* Input búsqueda */}
+          <input
+            type="text"
+            value={filters.searchText}
+            onChange={(e) => updateFilter('searchText', e.target.value)}
+            placeholder="Buscá por ubicación o palabra clave"
+            className="flex-1 min-w-[200px] h-10 px-3 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+          />
+          {/* Filtro tipo */}
+          <select
+            value={filters.types[0] ?? ''}
+            onChange={(e) => updateFilter('types', e.target.value ? [e.target.value] : [])}
+            className="h-10 px-3 border rounded-md text-sm bg-white"
+          >
+            <option value="">Todos los tipos</option>
+            <option value="casa">Casa</option>
+            <option value="departamento">Departamento</option>
+            <option value="terreno">Terreno</option>
+            <option value="local">Local</option>
+          </select>
+          {/* Botón limpiar filtros */}
+          {hasActiveFilters && (
+            <button
+              onClick={resetFilters}
+              className="h-10 px-4 bg-gray-100 hover:bg-gray-200 border rounded-md text-sm text-gray-600 transition-colors"
+            >
+              Limpiar filtros
+            </button>
+          )}
         </div>
-        {/* Input búsqueda ######### */}
-        <input
-          type="text"
-          placeholder="Buscá por ubicación o palabra clave"
-          className="flex-1 min-w-[200px] h-10 px-3 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-        />
-        {/* Filtros */}
-        <select className="h-10 px-3 border rounded-md text-sm bg-white">
-          <option>Venta</option>
-          <option>Alquiler</option>
-        </select>
       </header>
 
-      {/* Contenedor Principal (Resultados y Mapa) */}
+      {/* Contenedor Principal */}
       <div className="flex flex-col md:flex-row flex-grow relative overflow-hidden">
-        {/* Panel Lateral Colapsable */}
+        {/* Panel Lateral */}
         <aside
           className={`
             bg-white transition-all duration-300 ease-in-out z-10 border-gray-200 overflow-hidden
-            ${
-              isSidebarOpen
-                ? 'w-full h-[40vh] md:w-[30%] md:h-auto border-b md:border-b-0 md:border-r opacity-100'
-                : 'w-0 h-0 md:w-0 md:h-auto opacity-0'
+            ${isSidebarOpen
+              ? 'w-full h-[40vh] md:w-[30%] md:h-auto border-b md:border-b-0 md:border-r opacity-100'
+              : 'w-0 h-0 md:w-0 md:h-auto opacity-0'
             }
           `}
         >
-          <div
-            className={`
-            p-4 h-full overflow-y-auto transition-opacity duration-200
-            ${isSidebarOpen ? 'opacity-100 delay-100' : 'opacity-0'}
-            md:w-[30vw] min-w-[250px]
-          `}
-          >
+          <div className={`p-4 h-full overflow-y-auto transition-opacity duration-200 ${isSidebarOpen ? 'opacity-100 delay-100' : 'opacity-0'} md:w-[30vw] min-w-[250px]`}>
             <div className="flex justify-end mb-4">
               <button
                 onClick={() => setIsSidebarOpen(false)}
@@ -62,7 +72,6 @@ export default function BusquedaMapaPage() {
                 Cerrar
               </button>
             </div>
-
             <div className="space-y-4">
               <div className="h-28 bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
                 <div className="h-4 bg-gray-200 w-3/4 mb-3 rounded"></div>
@@ -75,32 +84,22 @@ export default function BusquedaMapaPage() {
 
         {/* Área del Mapa */}
         <section className="flex-grow bg-gray-100 relative w-full h-[60vh] md:h-auto transition-all duration-300">
-          {/* Botón flotante para expandir/contraer el panel */}
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="absolute left-0 top-4 z-[1000] bg-white border border-gray-300 shadow-md p-2 rounded-r-md hover:bg-gray-50 flex items-center justify-center transition-colors focus:outline-none hidden md:flex"
             title={isSidebarOpen ? 'Contraer panel' : 'Expandir panel'}
           >
-            <svg
-              className="w-5 h-5 text-gray-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d={isSidebarOpen ? 'M15 19l-7-7 7-7' : 'M9 5l7 7-7 7'}
-              />
+            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d={isSidebarOpen ? 'M15 19l-7-7 7-7' : 'M9 5l7 7-7 7'} />
             </svg>
           </button>
 
           <div className="absolute inset-0">
-            <MapView 
+            <MapView
               selectedId={selectedPropertyId}
               onSelect={setSelectedPropertyId}
+              filters={filters}
             />
           </div>
         </section>
