@@ -168,22 +168,34 @@ export default function MapView({
                   click: () => onSelect?.(property.id),
                 }}
               >
-                <Popup>
-                  <div className="text-sm min-w-[160px]">
-                    <p className="font-semibold text-gray-800 mb-1">
-                      {property.title}
-                    </p>
-                    <p
-                      className="font-bold"
-                      style={{ color: PIN_LABEL[property.type] }}
-                    >
-                      {formatPrice(property.price, property.currency)}
-                    </p>
-                    <p className="text-gray-500 capitalize mt-1">
-                      {property.type}
-                    </p>
-                  </div>
-                </Popup>
+              <Popup>
+  <div className="text-sm min-w-[180px] max-w-[220px]">
+    <div
+      className="h-1.5 rounded-t mb-2"
+      style={{ backgroundColor: PIN_FILL[property.type] }}
+    />
+    <div className="flex items-center gap-2 mb-1">
+      <span className="text-xl">
+        {property.type === 'casa' && '🏠'}
+        {property.type === 'departamento' && '🏢'}
+        {property.type === 'terreno' && '🌳'}
+        {property.type === 'local' && '🏪'}
+      </span>
+      <p className="font-semibold text-gray-800 leading-tight">
+        {property.title}
+      </p>
+    </div>
+    <p className="font-bold text-lg mb-2" style={{ color: PIN_LABEL[property.type] }}>
+      {formatPrice(property.price, property.currency)}
+    </p>
+    <span
+      className="inline-block text-xs font-medium px-2 py-0.5 rounded-full text-white capitalize"
+      style={{ backgroundColor: PIN_FILL[property.type] }}
+    >
+      {property.type}
+    </span>
+  </div>
+</Popup>
               </Marker>
             )
           })}
