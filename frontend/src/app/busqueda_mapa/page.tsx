@@ -31,7 +31,30 @@ export default function BusquedaMapaPage() {
         <select className="h-10 px-3 border rounded-md text-sm bg-white">
           <option>Venta</option>
           <option>Alquiler</option>
+          <option>Anticretico</option>
         </select>
+
+        <select className="h-10 px-3 border rounded-md text-sm bg-white">
+          <option>Precio</option>
+          <option>Menor a Mayor</option>
+          <option>Mayor a Menor</option>
+        </select>
+
+        <select className="h-10 px-3 border rounded-md text-sm bg-white">
+          <option>Tipo de inmueble</option>
+          <option>Casa</option>
+          <option>Departamento</option>
+          <option>Terreno</option>
+        </select>
+
+        <button className="h-10 px-4 bg-orange-500 text-white rounded-md hover:bg-orange-600 text-sm">
+          Buscar
+        </button>
+
+        <button className="h-10 px-4 bg-orange-500 text-white rounded-md hover:bg-orange-600 text-sm">
+          Borrar
+        </button>
+
       </header>
 
       {/* Contenedor Principal (Resultados y Mapa) */}

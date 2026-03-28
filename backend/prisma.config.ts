@@ -6,6 +6,7 @@ import path from 'path'
 dotenv.config({ path: path.join(__dirname, '.env') })
 
 export default defineConfig({
+  schema: "prisma/",
   migrations: {
     seed: 'bun ./prisma/seed.ts'
   },
