@@ -223,7 +223,8 @@ export const confirmarPago = async (req: Request, res: Response) => {
       await createNotificationService({
         correo: transaccion.usuario.correo,
         titulo: '¡Tu pago fue confirmado!',
-        mensaje: `Tu pago del plan ${transaccion.plan_suscripcion?.nombre_plan ?? '—'} (REF-${transaccionId}) fue aprobado el ${fechaAprobacion}. Tu suscripción ya está activa y vence el ${fechaVencimiento}.`,
+        mensaje: `Plan ${transaccion.plan_suscripcion?.nombre_plan ?? '—'} activado. Tu pago (REF-${transaccionId}) fue aprobado el ${fechaAprobacion}. Tu suscripción ya está activa y vence el ${fechaVencimiento}.`,
+        tipo: 'PAGO_APROBADO',
       })
     } catch { /* no bloquea el flujo */ }
 
@@ -369,6 +370,7 @@ export const notificarAdmin = async (req: AuthRequest, res: Response) => {
           correo: a.correo,
           titulo: 'Nuevo pago pendiente de verificación',
           mensaje: `${nombreUsuario} indica haber realizado el pago REF-${id} del plan ${planNombre}. Monto: ${monto} · Método: ${metodo} · Fecha: ${fechaHora}. Revisa el panel de pagos.`,
+          tipo: 'PAGO_PENDIENTE',
         })
       )
     )
