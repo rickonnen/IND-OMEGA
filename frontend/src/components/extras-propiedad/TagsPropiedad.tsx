@@ -109,7 +109,7 @@ export default function TagsPropiedad({
     setNuevoTag("");
     setError("");
     setMensajeExito("¡Excelente! El tag fue agregado.");
-
+    onGuardar?.(nuevos);
     setTimeout(() => setMensajeExito(""), 2000);
   };
 
@@ -118,12 +118,15 @@ export default function TagsPropiedad({
     setTags(actualizados);
     setError("");
     setMensajeExito("");
+    onGuardar?.(actualizados);
   };
 
   const handleGuardar = () => {
+    if (tags.length === 0) {
+      setError("Agrega al menos un tag antes de guardar");
+      return;
+    }
     onGuardar?.(tags);
-    setMensajeExito("✓ Tags guardados correctamente");
-    setTimeout(() => setMensajeExito(""), 2000);
   };
 
   return (
