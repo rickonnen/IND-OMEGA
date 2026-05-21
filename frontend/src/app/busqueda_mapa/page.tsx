@@ -1035,6 +1035,9 @@ function BusquedaMapaContent() {
                   camas={property.nroCuartos ?? 0}
                   banos={property.nroBanos ?? 0}
                   metros={property.superficieM2 ?? 0}
+                  visualizaciones={property.totalVisualizaciones ?? 0}
+                  compartidos={property.totalCompartidos ?? 0}
+                  mostrarEstadisticas
                   // HU4 - Pasa la acción de abrir detalle al botón "Ver detalles" en vista grilla
                   onViewDetails={() => {
                     if (!isCompareMode) abrirDetallePropiedad(property.id)
@@ -1572,6 +1575,9 @@ function BusquedaMapaContent() {
                         camas={pinnedProperty.nroCuartos ?? 0}
                         banos={pinnedProperty.nroBanos ?? 0}
                         metros={pinnedProperty.superficieM2 ?? 0}
+                        visualizaciones={pinnedProperty.totalVisualizaciones ?? 0}
+                        compartidos={pinnedProperty.totalCompartidos ?? 0}
+                        mostrarEstadisticas
                         precio={pinnedProperty.precio ? Number(pinnedProperty.precio) : undefined}
                         precio_anterior={
                           pinnedProperty.precio_anterior
@@ -2033,6 +2039,9 @@ function BusquedaMapaContent() {
                               camas={property.nroCuartos ?? 0}
                               banos={property.nroBanos ?? 0}
                               metros={property.superficieM2 ?? 0}
+                              visualizaciones={property.totalVisualizaciones ?? 0}
+                              compartidos={property.totalCompartidos ?? 0}
+                              mostrarEstadisticas
                               onViewDetails={() => {
                                 if (!isCompareMode) abrirDetallePropiedad(property.id)
                               }}
