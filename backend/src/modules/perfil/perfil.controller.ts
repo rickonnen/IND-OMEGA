@@ -29,7 +29,7 @@ export const obtenerPerfil = async (req: AuthRequest, res: Response) => {
         pais: true,
         genero: true,
         direccion: true,
-        telefono_telefono_usuarioIdTousuario: true,
+        telefono_telefono_usuario_idTousuario: true,
         fecha_nacimiento: true,
       },
     });
@@ -632,5 +632,6 @@ export const obtenerFechaNacimiento = async (req: AuthRequest, res: Response) =>
     });
   }
 };
+
 
 

@@ -7,7 +7,7 @@ interface InmuebleConScore {
   precio: number
   superficie_m2: number | null
   categoria: string | null
-  ubicacion_inmueble: any
+  ubicacion: any
   score: number
   razones: string[]
 }
@@ -126,7 +126,7 @@ export class FeaturesService {
             precio: Number(propiedad.precio),
             superficie_m2: propiedad.superficie_m2,
             categoria: propiedad.categoria,
-            ubicacion_inmueble: propiedad.ubicacion_inmueble,
+            ubicacion: propiedad.ubicacion,
             score: Math.round(score * 100) / 100,
             razones: razonesMap.get(id) || ['Recomendado automático']
           }
@@ -150,7 +150,7 @@ export class FeaturesService {
     // Estrategia simple: obtener propiedades de las mismas categorías y zonas
     const interactuados = await prisma.inmueble.findMany({
       where: { id: { in: idsInteractuados } },
-      select: { categoria: true, ubicacion_inmueble: true }
+      select: { categoria: true, ubicacion: true }
     })
 
     const categorias = [
@@ -181,8 +181,8 @@ export class FeaturesService {
     if (filtrosActivos?.query && filtrosActivos.query.trim() !== '') {
       const texto = filtrosActivos.query.trim()
       where.OR = [
-        { ubicacion_inmueble: { zona: { contains: texto, mode: 'insensitive' } } },
-        { ubicacion_inmueble: { direccion: { contains: texto, mode: 'insensitive' } } },
+        { ubicacion: { zona: { contains: texto, mode: 'insensitive' } } },
+        { ubicacion: { direccion: { contains: texto, mode: 'insensitive' } } },
         { titulo: { contains: texto, mode: 'insensitive' } }
       ]
     }
@@ -190,7 +190,7 @@ export class FeaturesService {
     const candidatos = await prisma.inmueble.findMany({
       where,
       take: limite,
-      include: { publicacion: true }
+      include: { publicaciones: true }
     })
 
     return candidatos
@@ -271,7 +271,7 @@ export class FeaturesService {
       where: { estado: 'ACTIVO' },
       orderBy: { fecha_publicacion: 'desc' }, // asumiendo campo popularidad
       take: limit,
-      include: { publicacion: true, ubicacion_inmueble: true }
+      include: { publicaciones: true, ubicacion: true }
     })
     return fecha_publicacion.map((p) => ({
       id: p.id,
@@ -279,7 +279,7 @@ export class FeaturesService {
       precio: Number(p.precio),
       superficie_m2: p.superficie_m2 ? Number(p.superficie_m2) : null,
       categoria: p.categoria,
-      ubicacion_inmueble: p.ubicacion_inmueble,
+      ubicacion: p.ubicacion,
       score: 50,
       razones: ['Popularidad general']
     }))
@@ -287,3 +287,5 @@ export class FeaturesService {
 }
 
 export const featuresService = new FeaturesService()
+
+

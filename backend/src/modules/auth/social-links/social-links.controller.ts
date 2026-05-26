@@ -57,3 +57,4 @@ export const getLinkedInOriginalEmailController = async (req: Request, res: Resp
 
   return res.status(200).json({ linkedinOriginalEmail: email })
 }
+

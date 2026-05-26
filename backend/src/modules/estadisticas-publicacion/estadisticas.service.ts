@@ -344,8 +344,7 @@ export class EstadisticasPublicacionService {
       },
       include: {
         inmueble: {
-          include: {
-            publicacion: {
+          include: { publicaciones: {
               where: {
                 estado: EstadoPublicacion.ACTIVA,
               },
@@ -353,14 +352,14 @@ export class EstadisticasPublicacionService {
                 multimedia: true,
               },
             },
-            ubicacion_inmueble: true,
+            ubicacion: true,
           },
         },
       },
     });
 
     const publicacionesIds = vistas
-      .map((vista) => vista.inmueble.publicacion[0]?.id)
+      .map((vista) => vista.inmueble.publicaciones[0]?.id)
       .filter((id): id is number => typeof id === "number");
 
     const estadisticas = await prisma.publicacion_estadistica.findMany({
@@ -390,7 +389,7 @@ export class EstadisticasPublicacionService {
     });
 
     return vistas.map((vista) => {
-      const publicacionActiva = vista.inmueble.publicacion[0];
+      const publicacionActiva = vista.inmueble.publicaciones[0];
 
       const estadistica = publicacionActiva
         ? estadisticasPorPublicacion.get(publicacionActiva.id)
@@ -405,8 +404,8 @@ export class EstadisticasPublicacionService {
         precio: Number(vista.inmueble.precio),
         categoria: vista.inmueble.categoria,
         tipoAccion: vista.inmueble.tipo_accion,
-        zona: vista.inmueble.ubicacion_inmueble?.zona || null,
-        ciudad: vista.inmueble.ubicacion_inmueble?.ciudad || null,
+        zona: vista.inmueble.ubicacion?.zona || null,
+        ciudad: vista.inmueble.ubicacion?.ciudad || null,
         imagen:
           publicacionActiva?.multimedia?.find((item) => item.tipo === "IMAGEN")
             ?.url || null,
@@ -476,3 +475,4 @@ export class EstadisticasPublicacionService {
     }, {});
   }
 }
+

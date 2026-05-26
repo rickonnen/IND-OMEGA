@@ -37,12 +37,12 @@ export const createUser = async (data: {
       correo: data.correo,
       password: data.password,
       ...(data.telefono && {
-        telefono_telefono_usuarioIdTousuario: {
+        telefonos: {
           create: [{ numero: data.telefono, codigoPais: "" }],
         },
       }),
     },
-    include: { telefono_telefono_usuarioIdTousuario: true, rol: true },
+    include: { telefonos: true, rol: true },
   });
 };
 
@@ -50,7 +50,7 @@ export const createUser = async (data: {
 export const createSession = async (data: {
   token: string;
   usuarioId: number;
-  fechaExpiracion: Date;
+  fechaExpiracion: Date; // era: fecha_expiracion
 }) => {
   return prisma.sesion.create({ data });
 };
@@ -73,7 +73,7 @@ export const desactiveSessionByToken = async (token: string) => {
 export const createPasswordRecovery = async (data: {
   usuarioId: number;
   token: string;
-  expiraEn: Date;
+  expiraEn: Date; // era: expira_en
 }) => {
   return prisma.recuperacion_password.create({ data });
 };
@@ -101,8 +101,8 @@ export const desactivarRecuperacionesPasswordActivas = async (
 // ─── 2FA ───────────────────────────────────────────────
 export const create2FACode = async (data: {
   usuarioId: number;
-  codigoHash: string;
-  expiraEn: Date;
+  codigoHash: string; // era: codigo_hash
+  expiraEn: Date;     // era: expira_en
 }) => {
   return prisma.codigo_2fa.create({ data });
 };

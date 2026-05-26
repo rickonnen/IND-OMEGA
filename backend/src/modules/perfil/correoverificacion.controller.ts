@@ -469,13 +469,13 @@ export const solicitarCambioEmail = async (req: AuthRequest, res: Response) => {
     }
 
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
-    const expiraEn = new Date(Date.now() + 5 * 60 * 1000);
+    const expira_en = new Date(Date.now() + 5 * 60 * 1000);
 
     await prisma.cambio_email.create({
       data: {
         token: otp,
         email_nuevo: emailNuevo,
-        expira_en: expiraEn,
+        expira_en: expira_en,
         usuario_id: usuarioId,
       },
     });

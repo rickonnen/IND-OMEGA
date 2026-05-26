@@ -31,7 +31,7 @@ export const optionalAuth = async (
     }
 
     req.user = {
-      id: session.usuario.id,
+      id: session.usuarioId,
       correo: session.usuario.correo,
     };
 
@@ -40,3 +40,4 @@ export const optionalAuth = async (
     return next();
   }
 };
+

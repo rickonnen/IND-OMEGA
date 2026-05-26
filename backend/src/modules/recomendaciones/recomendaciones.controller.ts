@@ -124,3 +124,4 @@ export const invalidarCacheUsuario = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, error: 'Error al invalidar caché' })
   }
 }
+

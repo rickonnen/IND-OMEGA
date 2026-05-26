@@ -27,10 +27,9 @@ export class FeaturesVectorService {
       take: 50,
       include: {
         inmueble: {
-          include: {
-            publicacion: true,
+          include: { publicaciones: true,
             inmueble_amenidad: true,
-            ubicacion_inmueble: true
+            ubicacion: true
           }
         }
       }
@@ -40,10 +39,9 @@ export class FeaturesVectorService {
       where: { usuarioId },
       include: {
         inmueble: {
-          include: {
-            publicacion: true,
+          include: { publicaciones: true,
             inmueble_amenidad: true,
-            ubicacion_inmueble: true
+            ubicacion: true
           }
         }
       }
@@ -76,7 +74,7 @@ export class FeaturesVectorService {
       count = 0
 
     for (const { inmueble, peso } of todos) {
-      const zona = inmueble.ubicacion_inmueble?.zona
+      const zona = inmueble.ubicacion?.zona
       if (zona) zonaCount.set(zona, (zonaCount.get(zona) || 0) + peso)
 
       const cat = inmueble.categoria
@@ -118,11 +116,10 @@ export class FeaturesVectorService {
   async extraerVector(inmuebleId: number, contexto: ContextoUsuario): Promise<FeatureVector> {
     const inmueble = await prisma.inmueble.findUnique({
       where: { id: inmuebleId },
-      include: {
-        publicacion: true,
+      include: { publicaciones: true,
         inmueble_amenidad: true,
         inmueble_etiqueta: { include: { etiqueta: true } },
-        ubicacion_inmueble: true
+        ubicacion: true
       }
     })
 
@@ -144,7 +141,7 @@ export class FeaturesVectorService {
 
     const precio = Number(inmueble.precio)
     const superficie = Number(inmueble.superficie_m2 || 0)
-    const zona = inmueble.ubicacion_inmueble?.zona || ''
+    const zona = inmueble.ubicacion?.zona || ''
 
     // === FEATURES DEL INMUEBLE ===
     const f_categoria = (categoriaMap[inmueble.categoria || ''] || 0) / 6
@@ -233,3 +230,4 @@ export class FeaturesVectorService {
 }
 
 export const featuresVectorService = new FeaturesVectorService()
+

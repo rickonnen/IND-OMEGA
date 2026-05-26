@@ -115,14 +115,13 @@ const buildFacebookSessionResponse = async (
   }
 
   const token = generateToken(jwtPayload)
-  const fechaExpiracion = new Date(Date.now() + SESSION_DURATION_MS)
+  const fecha_expiracion = new Date(Date.now() + SESSION_DURATION_MS)
 
   await createFacebookSession({
     token,
     usuarioId: user.id,
-    fechaExpiracion
+    fecha_expiracion: new Date(Date.now() + SESSION_DURATION_MS)
   })
-
   return {
     message,
     token,
@@ -290,7 +289,7 @@ export const linkFacebookToCurrentUserByCodeService = async (
   const facebookUser = await getFacebookUserInfo(tokenData.access_token as string)
 
   const facebookId = facebookUser.id?.trim()
-  const correoProveedor = facebookUser.email?.trim().toLowerCase() ?? null
+  const correo_proveedor = facebookUser.email?.trim().toLowerCase() ?? null
 
   if (!facebookId) {
     throw new FacebookAuthError(
@@ -302,7 +301,7 @@ export const linkFacebookToCurrentUserByCodeService = async (
 
   const existingLinkByExternalId = await findFacebookLinkByExternalId(facebookId)
 
-  if (existingLinkByExternalId && existingLinkByExternalId.usuarioId !== session.usuario.id) {
+  if (existingLinkByExternalId && existingLinkByExternalId.usuarioId !== session.usuarioId) {
     throw new FacebookAuthError(
       'Esta cuenta de Facebook ya está vinculada a otro usuario.',
       'FACEBOOK_AUTH_FAILED',
@@ -310,14 +309,14 @@ export const linkFacebookToCurrentUserByCodeService = async (
     )
   }
 
-  const existingLinkByUser = await findFacebookLinkByUserId(session.usuario.id)
+  const existingLinkByUser = await findFacebookLinkByUserId(session.usuarioId)
 
   if (existingLinkByUser) {
     if (existingLinkByUser.idExterno === facebookId) {
       return {
         message: 'Tu cuenta de Facebook ya estaba vinculada.',
         provider: 'facebook',
-        linkedEmail: existingLinkByUser.correoProveedor ?? correoProveedor
+        linkedEmail: existingLinkByUser.correoProveedor ?? correo_proveedor
       }
     }
 
@@ -329,14 +328,15 @@ export const linkFacebookToCurrentUserByCodeService = async (
   }
 
   await createFacebookLinkForUser({
-    usuarioId: session.usuario.id,
+    usuarioId: session.usuarioId,
     facebookId,
-    correoProveedor
+    correo_proveedor
   })
 
   return {
     message: 'Facebook fue vinculado correctamente.',
     provider: 'facebook',
-    linkedEmail: correoProveedor
+    linkedEmail: correo_proveedor
   }
 }
+

@@ -98,7 +98,7 @@ export async function crearOrdenPublicidad(
     metodo_pago: METODO_PUBLICIDAD,
     estado: 'PENDIENTE',
     qrContent: planFK.imagen_gr_url ?? null,
-    fechaExpiracion: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+    fecha_expiracion: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
   }
 }
 
@@ -125,3 +125,4 @@ export async function obtenerDatosPublicidad(
     return null
   }
 }
+

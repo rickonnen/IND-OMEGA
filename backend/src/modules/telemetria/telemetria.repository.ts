@@ -52,7 +52,7 @@ export class TelemetriaRepository {
   // 2. Obtener features del inmueble para guardar en entrenamiento_ml
   const inmueble = await prisma.inmueble.findUnique({
     where: { id: inmuebleId },
-    include: { ubicacion_inmueble: true, inmueble_amenidad: true }
+    include: { ubicacion: true, inmueble_amenidad: true }
   })
 
   if (inmueble) {
@@ -80,8 +80,8 @@ export class TelemetriaRepository {
           superficie_m2: Number(inmueble.superficie_m2 || 0),
           nro_cuartos: inmueble.nro_cuartos || 0,
           nro_banos: inmueble.nro_banos || 0,
-          zona: inmueble.ubicacion_inmueble?.zona || null,
-          ciudad: inmueble.ubicacion_inmueble?.ciudad || null,
+          zona: inmueble.ubicacion?.zona || null,
+          ciudad: inmueble.ubicacion?.ciudad || null,
           amenidades: inmueble.inmueble_amenidad.map(a => a.amenidad_id),
           precioReducido: inmueble.precio_anterior !== null &&
             Number(inmueble.precio_anterior) > Number(inmueble.precio)
@@ -144,3 +144,4 @@ export class TelemetriaRepository {
     return resultados;
   }
 }
+

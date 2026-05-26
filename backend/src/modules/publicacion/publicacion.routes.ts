@@ -63,3 +63,4 @@ router.delete(
 router.get("/:id/publicitar/estado", obtenerEstadoPublicidadController);
 
 export default router;
+

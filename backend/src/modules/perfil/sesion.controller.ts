@@ -38,8 +38,8 @@ export const sesionController = {
       const sesionesFormateadas = sesiones.map((sesion) => ({
         id: sesion.id,
         token: sesion.token.substring(0, 20) + '...',
-        fechaInicio: sesion.fechaInicio,
-        fechaExpiracion: sesion.fechaExpiracion,
+        fecha_inicio: sesion.fechaInicio,
+        fecha_expiracion: sesion.fechaExpiracion,
         estado: sesion.estado,
         metodoAuth: sesion.metodo_auth,
         esActual: sesion.token === tokenActual
@@ -171,3 +171,4 @@ export const sesionController = {
     }
   }
 }
+

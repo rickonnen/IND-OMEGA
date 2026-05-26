@@ -7,3 +7,4 @@ const router = Router()
 router.post('/inmueble/:inmuebleId', requireAuth, crearPoi)
 
 export default router
+

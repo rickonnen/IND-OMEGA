@@ -30,7 +30,7 @@ export const generarPagoQr = async (req: Request, res: Response): Promise<void> 
 
     const nuevoPago = await prisma.transacciones.create({
       data: {
-        id_usuario: usuario.id,
+        id_usuario: usuario.id, // era: usuario
         id_suscripcion: plan.id,
         subtotal,
         iva_porcentaje,
@@ -74,7 +74,7 @@ export const obtenerPagoPendiente = async (req: Request, res: Response): Promise
       ? new Date(pagoPendiente.fecha_intento)
       : new Date()
 
-    const fechaExpiracion = new Date(fechaIntento.getTime() + 5 * 60000)
+    const fecha_expiracion = new Date(fechaIntento.getTime() + 5 * 60000)
 
     res.status(200).json({
       id: pagoPendiente.id.toString(),
@@ -82,7 +82,7 @@ export const obtenerPagoPendiente = async (req: Request, res: Response): Promise
       referencia: `PAY-${pagoPendiente.id}`,
       qrContent: '000201010211_TU_CODIGO_QR_BANCARIO_AQUI',
       estado: pagoPendiente.estado?.toLowerCase(),
-      fechaExpiracion: fechaExpiracion.toISOString()
+      fecha_expiracion: fecha_expiracion.toISOString()
     })
   } catch (error) {
     console.error(error)

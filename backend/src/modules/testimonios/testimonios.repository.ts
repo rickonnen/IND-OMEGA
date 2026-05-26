@@ -35,7 +35,7 @@ export const testimoniosRepository = {
       categoria: t.categoria,
       fecha_creacion: t.fecha_creacion,
       usuario: {
-        id: t.usuario.id,
+        id: t.usuario_id,
         nombre: t.usuario.nombre,
         apellido: t.usuario.apellido,
         avatar: t.usuario.avatar,
@@ -80,3 +80,4 @@ export const testimoniosRepository = {
     });
   },
 };
+

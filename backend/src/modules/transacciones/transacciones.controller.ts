@@ -41,7 +41,7 @@ export const generarPagoQr = async (req: AuthRequest, res: Response) => {
       verificacion_requerida: transaccion.verificacion_requerida,
       monto_descuento: Number(transaccion.monto_descuento ?? 0),
       referencia: `REF-${transaccion.id}`,
-      fechaExpiracion: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+      fecha_expiracion: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
       qrContent: plan.imagen_gr_url ?? null,
       plan_suscripcion: {
         nombre_plan: plan.nombre_plan,
@@ -124,7 +124,7 @@ export const obtenerPagoPendiente = async (req: Request, res: Response) => {
       referencia: `REF-${transaccion.id}`,
       estado: transaccion.estado?.toLowerCase() ?? 'pendiente',
       qrContent: transaccion.plan_suscripcion?.imagen_gr_url ?? null,
-      fechaExpiracion: new Date(
+      fecha_expiracion: new Date(
         (transaccion.fecha_intento?.getTime() ?? Date.now()) + 30 * 60 * 1000
       ).toISOString(),
       subtotal: Number(transaccion.subtotal),
@@ -595,3 +595,4 @@ export const cancelarTransaccion = async (req: Request, res: Response) => {
     return res.status(500).json({ error: toMessage(error) })
   }
 }
+

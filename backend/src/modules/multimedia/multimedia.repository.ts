@@ -13,7 +13,7 @@ const mapPublicationRecord = (publication: {
 }): PublicacionRecord => {
   return {
     id: publication.id,
-    usuario_id: publication.usuario_id,
+    usuarioId: publication.usuario_id,
     titulo: publication.titulo,
   };
 };
@@ -133,3 +133,4 @@ export const createManyMultimediaRepository = async (
 
   return createdItems.map(mapMultimediaRecord);
 };
+

@@ -89,3 +89,4 @@ export const getLinkedInOriginalEmail = async (usuarioId: number) => {
   if (!link) return null
   return link.correoProveedor ?? null
 }
+

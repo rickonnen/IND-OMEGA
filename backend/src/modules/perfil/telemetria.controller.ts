@@ -97,7 +97,7 @@ export const telemetriaController = {
 
       // Actualizar usuario con datos de telemetría
       const usuarioActualizado = await prisma.usuario.update({
-        where: { id: usuario.id },
+        where: { id: usuario },
         data: {
           ...(genero && { genero }),
           ...(fechaNacimientoDate && { fecha_nacimiento: fechaNacimientoDate }),
@@ -125,7 +125,7 @@ export const telemetriaController = {
             tipo: "usuario_logueado"
           },
           fecha_visita: new Date(),
-          usuario_id: usuario.id
+          usuario_id: usuario
         }
       });
 
@@ -133,7 +133,7 @@ export const telemetriaController = {
         success: true,
         message: "¡Gracias! Telemetría aceptada",
         data: {
-          usuario_id: usuario.id,
+          usuario_id: usuario,
           email: usuario.correo,
           genero: genero || usuario.genero,
           edad: edad,
@@ -241,12 +241,12 @@ export const telemetriaController = {
         });
       }
 
-      const { fechaInicio, fechaFin } = req.query;
+      const { fecha_inicio, fechaFin } = req.query;
 
       const where: any = {};
-      if (fechaInicio && fechaFin) {
+      if (fecha_inicio && fechaFin) {
         where.fechaRegistro = {
-          gte: new Date(fechaInicio as string),
+          gte: new Date(fecha_inicio as string),
           lte: new Date(fechaFin as string)
         };
       }
@@ -269,7 +269,7 @@ export const telemetriaController = {
       const visitantes = await prisma.visitor.findMany({
         where: {
           fecha_visita: {
-            gte: fechaInicio ? new Date(fechaInicio as string) : undefined,
+            gte: fecha_inicio ? new Date(fecha_inicio as string) : undefined,
             lte: fechaFin ? new Date(fechaFin as string) : undefined
           }
         },

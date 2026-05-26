@@ -122,7 +122,7 @@ router.get('/resumen', comparacionController.getResumenComparaciones)
  * {
  *   "id": 1,
  *   "nombre": "Comparación Departamentos Centro",
- *   "creadoEn": "2026-05-07T10:00:00.000Z",
+ *   "creado_en": "2026-05-07T10:00:00.000Z",
  *   "usuarioId": 5,
  *   "detalle_comparacion": [
  *     {
@@ -184,11 +184,11 @@ router.get('/:id', comparacionController.getComparacionById)
  *   "id": 3,
  *   "nombre": "Comparación Departamentos Centro",
  *   "usuarioId": 5,
- *   "creadoEn": "2026-05-10T15:30:00.000Z",
+ *   "creado_en": "2026-05-10T15:30:00.000Z",
  *   "detalle_comparacion": [
  *     {
  *       "id": 5,
- *       "comparacionId": 3,
+ *       "comparacion_id": 3,
  *       "inmuebleId": 10,
  *       "orden": 0,
  *       "inmueble": {
@@ -199,7 +199,7 @@ router.get('/:id', comparacionController.getComparacionById)
  *     },
  *     {
  *       "id": 6,
- *       "comparacionId": 3,
+ *       "comparacion_id": 3,
  *       "inmuebleId": 15,
  *       "orden": 1,
  *       "inmueble": {
@@ -289,7 +289,7 @@ router.delete('/:id', comparacionController.eliminarComparacion)
  * @response 200 - OK
  * {
  *   "id": 7,
- *   "comparacionId": 3,
+ *   "comparacion_id": 3,
  *   "inmuebleId": 25,
  *   "orden": 2,
  *   "inmueble": {
@@ -375,7 +375,7 @@ router.delete('/:id/propiedades/:propiedadId', comparacionController.eliminarPro
  *   {
  *     "id": 1,
  *     "nombre": "Comparación Departamentos Centro",
- *     "creadoEn": "2026-05-07T10:00:00.000Z",
+ *     "creado_en": "2026-05-07T10:00:00.000Z",
  *     "usuarioId": 5,
  *     "detalle_comparacion": [
  *       {
@@ -411,3 +411,4 @@ router.delete('/:id/propiedades/:propiedadId', comparacionController.eliminarPro
 router.get('/categoria/:categoria', comparacionController.getComparacionesPorCategoria)
 
 export default router
+

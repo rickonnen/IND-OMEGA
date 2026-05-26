@@ -42,3 +42,4 @@ export const getRecomendados = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, error: 'Error al obtener recomendados' });
   }
 };
+

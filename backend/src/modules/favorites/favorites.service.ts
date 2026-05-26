@@ -14,9 +14,8 @@ export class FavoritesService {
         orderBy: { agregadoEn: "desc" },
         include: {
           inmueble: {
-            include: {
-              ubicacion_inmueble: true,
-              publicacion: {
+            include: { ubicacion: true,
+              publicaciones: {
                 where: { estado: "ACTIVA" }, // Solo publicaciones activas
                 include: { multimedia: true },
                 take: 1,
@@ -38,7 +37,7 @@ export class FavoritesService {
         inmueble: {
           ...f.inmueble,
           imagen_principal:
-            f.inmueble.publicacion[0]?.multimedia[0]?.url || null,
+            f.inmueble.publicaciones[0]?.multimedia[0]?.url || null,
         },
       })),
       totalPages: Math.ceil(total / perPage),
@@ -58,7 +57,7 @@ export class FavoritesService {
       );
       const inmueble = await prisma.inmueble.findUnique({
         where: { id: inmuebleId },
-        include: { ubicacion_inmueble: true, inmueble_amenidad: true },
+        include: { ubicacion: true, inmueble_amenidad: true },
       });
       console.log("[DEBUG] Inmueble encontrado:", inmueble?.id);
       if (inmueble) {
@@ -76,8 +75,8 @@ export class FavoritesService {
                 superficie_m2: Number(inmueble.superficie_m2 || 0),
                 nro_cuartos: inmueble.nro_cuartos || 0,
                 nro_banos: inmueble.nro_banos || 0,
-                zona: inmueble.ubicacion_inmueble?.zona || null,
-                ciudad: inmueble.ubicacion_inmueble?.ciudad || null,
+                zona: inmueble.ubicacion?.zona || null,
+                ciudad: inmueble.ubicacion?.ciudad || null,
                 amenidades: inmueble.inmueble_amenidad.map(
                   (a) => a.amenidad_id,
                 ),
@@ -141,3 +140,4 @@ export class FavoritesService {
     }
   }
 }
+

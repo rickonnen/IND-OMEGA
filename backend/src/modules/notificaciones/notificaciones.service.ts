@@ -86,7 +86,7 @@ const mapNotificationToFrontend = (notification: {
   mensaje: string;
   leida: boolean | null;
   archivada?: boolean | null;
-  fechaCreacion?: Date | null;
+  fecha_creacion?: Date | null;
   tipo?: string | null;
   blog_id?: number | null;
 }) => {
@@ -96,7 +96,7 @@ const mapNotificationToFrontend = (notification: {
     description: notification.mensaje,
     status: notification.leida === true ? "leida" : "no leida",
     archivada: notification.archivada === true ? true : false,
-    fechaCreacion: notification.fechaCreacion || null,
+    fecha_creacion: notification.fecha_creacion || null,
     tipo: notification.tipo ?? "GENERAL",
     blogId: notification.blog_id ?? null,
   };
@@ -148,7 +148,7 @@ export const getNotificationByIdService = async ({
     description: notification.mensaje,
     status: notification.leida ? "leida" : "no leida",
     archivada: notification.archivada,
-    fechaCreacion: notification.fechaCreacion,
+    fecha_creacion: notification.fechaCreacion,
     tipo: notification.tipo ?? "GENERAL",
     blogId: notification.blog_id ?? null,
   };
@@ -413,3 +413,4 @@ export const archiveNotificationService = async (
     item: mapNotificationToFrontend({ ...notification, archivada: true }),
   };
 };
+

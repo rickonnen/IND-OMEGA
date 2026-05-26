@@ -31,8 +31,7 @@ export const buscarPublicacionesPorUsuarioRepository = async (
     include: {
       multimedia: true,
       inmueble: {
-        include: {
-          ubicacion_inmueble: {
+        include: { ubicacion: {
             select: {
               id: true,
               direccion: true,
@@ -56,8 +55,7 @@ export const buscarPublicacionPorIdRepository = async (id: number) => {
     where: { id },
     include: {
       inmueble: {
-        include: {
-          ubicacion_inmueble: true,
+        include: { ubicacion: true,
         },
       },
       multimedia: true,
@@ -90,7 +88,7 @@ export const buscarResumenFinalPorIdRepository = async (
           nro_banos: true,
           descripcion: true,
           estado: true,
-          ubicacion_inmueble: {
+          ubicacion: {
             select: {
               direccion: true,
               ciudad: true,
@@ -155,7 +153,7 @@ export const actualizarPublicacionRepository = async (
   const inmuebleData: {
     tipo_accion?: TipoAccionValue;
     precio?: number;
-    ubicacion_inmueble?: {
+    ubicacion?: {
       update: {
         direccion: string;
       };
@@ -186,7 +184,7 @@ export const actualizarPublicacionRepository = async (
   }
 
   if (direccionRaw !== undefined) {
-    inmuebleData.ubicacion_inmueble = {
+    inmuebleData.ubicacion = {
       update: {
         direccion: String(direccionRaw).trim(),
       },
@@ -205,8 +203,7 @@ export const actualizarPublicacionRepository = async (
     include: {
       multimedia: true,
       inmueble: {
-        include: {
-          ubicacion_inmueble: true,
+        include: { ubicacion: true,
         },
       },
     },
@@ -252,7 +249,7 @@ export const buscarDetallePublicacionPorIdRepository = async (
           nombre: true,
           apellido: true,
           correo: true,
-          telefono_telefono_usuarioIdTousuario: {
+          telefono_telefono_usuario_idTousuario: {
             select: {
               codigoPais: true,
               numero: true,
@@ -273,7 +270,7 @@ export const buscarDetallePublicacionPorIdRepository = async (
           nro_banos: true,
           descripcion: true,
           estado: true,
-          ubicacion_inmueble: {
+          ubicacion: {
             select: {
               direccion: true,
               latitud: true,
@@ -333,7 +330,7 @@ export const buscarDetallePublicacionPorInmuebleIdRepository = async (
           nombre: true,
           apellido: true,
           correo: true,
-          telefono_telefono_usuarioIdTousuario: {
+          telefono_telefono_usuario_idTousuario: {
             select: {
               codigoPais: true,
               numero: true,
@@ -355,7 +352,7 @@ export const buscarDetallePublicacionPorInmuebleIdRepository = async (
           nro_banos: true,
           descripcion: true,
           estado: true,
-          ubicacion_inmueble: {
+          ubicacion: {
             select: {
               direccion: true,
               latitud: true,
@@ -399,8 +396,7 @@ export const confirmarPublicacionRepository = async (publicacionId: number) => {
     include: {
       multimedia: true,
       inmueble: {
-        include: {
-          ubicacion_inmueble: true,
+        include: { ubicacion: true,
         },
       },
     },
@@ -472,9 +468,9 @@ export const activarPublicidadRepository = async (
   paymentIntentId: string,
   duracionDias: number = 30
 ) => {
-  const fechaInicio = new Date();
-  const fechaExpiracion = new Date();
-  fechaExpiracion.setDate(fechaExpiracion.getDate() + duracionDias);
+  const fecha_inicio = new Date();
+  const fecha_expiracion = new Date();
+  fecha_expiracion.setDate(fecha_expiracion.getDate() + duracionDias);
 
   return prisma.publicacion.update({
     where: {
@@ -483,8 +479,8 @@ export const activarPublicidadRepository = async (
     },
     data: {
       promoted: true,
-      promotedAt: fechaInicio,
-      promotedExpiresAt: fechaExpiracion,
+      promotedAt: fecha_inicio,
+      promotedExpiresAt: fecha_expiracion,
       payment_intent_id: paymentIntentId,
     },
   });
@@ -541,3 +537,5 @@ export const verificarPublicidadActivaRepository = async (
     new Date(publicacion.promotedExpiresAt) > new Date()
   );
 };
+
+

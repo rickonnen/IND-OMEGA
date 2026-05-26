@@ -15,3 +15,4 @@ export interface ClickTelemetriaData {
   posicionLista?: number
   filtrosAplicados?: any
 }
+

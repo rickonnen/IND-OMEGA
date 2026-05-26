@@ -7,8 +7,7 @@ const findAll = async () => {
   })
 
   const publicacionesTags = await prisma.publicacion_tag.findMany({
-    where: {
-      publicacion: {
+    where: { publicacion: {
         estado: 'ACTIVA'
       }
     },
@@ -27,7 +26,7 @@ const findAll = async () => {
   return tags.map((tag) => ({
     id: tag.id,
     nombre: tag.nombre,
-    creado_en: tag.creado_en,
+    creadoEn: tag.creado_en,
     cantidad: countMap.get(tag.id) ?? 0
   }))
 }
@@ -38,8 +37,7 @@ const findAllWithContextualCounts = async (inmuebleWhere: Prisma.inmuebleWhereIn
   })
 
   const publicacionesTags = await prisma.publicacion_tag.findMany({
-    where: {
-      publicacion: {
+    where: { publicacion: {
         estado: 'ACTIVA',
         inmueble: inmuebleWhere
       }
@@ -59,7 +57,7 @@ const findAllWithContextualCounts = async (inmuebleWhere: Prisma.inmuebleWhereIn
   return tags.map((tag) => ({
     id: tag.id,
     nombre: tag.nombre,
-    creado_en: tag.creado_en,
+    creadoEn: tag.creado_en,
     cantidad: countMap.get(tag.id) ?? 0
   }))
 }
@@ -131,3 +129,4 @@ export const tagsRepository = {
   replacePublicacionTags,
   findPublicacionOwner
 }
+

@@ -128,16 +128,16 @@ export const linkLinkedInToUser = async (
 export const createLinkedInSession = async ({
   token,
   usuarioId,
-  fechaExpiracion
+  fecha_expiracion
 }: {
   token: string
   usuarioId: number
-  fechaExpiracion: Date
+  fecha_expiracion: Date
 }) => {
   return await createSession({
     token,
     usuarioId,
-    fechaExpiracion,
+    fechaExpiracion:fecha_expiracion,
     metodo_auth: 'linkedin'
   })
 }
@@ -187,3 +187,4 @@ export const updateLinkedInLastUsage = async (
     }
   })
 }
+

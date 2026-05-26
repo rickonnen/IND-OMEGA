@@ -60,7 +60,7 @@ export const createUser = async (data: CreateUserInput) => {
         correo: data.correo,
         password: data.password,
         rolId: rol.id,
-        telefono_telefono_usuarioIdTousuario: data.telefono
+        telefonos: data.telefono
           ? {
               create: {
                 codigoPais: "+591",
@@ -71,7 +71,7 @@ export const createUser = async (data: CreateUserInput) => {
           : undefined,
       },
       include: {
-        telefono_telefono_usuarioIdTousuario: true,
+        telefonos: true,
         rol: true,
       },
     });
@@ -84,7 +84,6 @@ export const createUser = async (data: CreateUserInput) => {
   }
 };
 
-// Incluye el campo `activo` para que loginService pueda verificar si la cuenta está desactivada
 export const findUser = async (correo: string) => {
   return await prisma.usuario.findUnique({
     where: { correo },
@@ -102,6 +101,7 @@ export const findUser = async (correo: string) => {
     },
   });
 };
+
 export const findUserByCorreo = async (correo: string) => {
   return await prisma.usuario.findUnique({
     where: { correo },
@@ -123,19 +123,19 @@ export const findUserById = async (id: number) => {
 export const createSession = async ({
   token,
   usuarioId,
-  fechaExpiracion,
+  fechaExpiracion, // era: fecha_expiracion
   metodo_auth,
 }: {
   token: string;
   usuarioId: number;
-  fechaExpiracion: Date;
+  fechaExpiracion: Date; // era: fecha_expiracion
   metodo_auth?: string;
 }) => {
   return await prisma.sesion.create({
     data: {
       token,
       usuarioId,
-      fechaExpiracion,
+      fechaExpiracion, // ahora coincide con el parámetro
       estado: true,
       metodo_auth: metodo_auth ?? "email",
     },
@@ -188,23 +188,24 @@ export const invalidateActive2FACodesByUserId = async (usuarioId: number) => {
 
 export const create2FACode = async ({
   usuarioId,
-  codigoHash,
-  expiraEn,
+  codigoHash, // era: codigo_hash
+  expiraEn,   // era: expira_en
 }: {
   usuarioId: number;
-  codigoHash: string;
-  expiraEn: Date;
+  codigoHash: string; // era: codigo_hash
+  expiraEn: Date;     // era: expira_en
 }) => {
   return await prisma.codigo_2fa.create({
     data: {
       usuarioId,
-      codigoHash,
-      expiraEn,
+      codigoHash, // era: codigoHash referenciando variable no declarada
+      expiraEn,   // era: expira_en (campo inexistente en schema)
       intentos: 0,
       activo: true,
     },
   });
 };
+
 export const desactivarRecuperacionesPasswordActivas = async (
   usuarioId: number,
 ) => {
@@ -223,17 +224,17 @@ export const desactivarRecuperacionesPasswordActivas = async (
 export const createPasswordRecovery = async ({
   usuarioId,
   token,
-  expiraEn,
+  expiraEn, // era: expira_en
 }: {
   usuarioId: number;
   token: string;
-  expiraEn: Date;
+  expiraEn: Date; // era: expira_en
 }) => {
   return prisma.recuperacion_password.create({
     data: {
       usuarioId,
       token,
-      expiraEn,
+      expiraEn, // era: expiraEn referenciando variable no declarada
       activo: true,
     },
   });
@@ -268,12 +269,12 @@ export const findActive2FACodeByUserId = async (usuarioId: number) => {
 
 export const findAny2FACodeByUserIdAndHash = async (
   usuarioId: number,
-  codigoHash: string,
+  codigo_hash: string,
 ) => {
   return await prisma.codigo_2fa.findFirst({
     where: {
       usuarioId,
-      codigoHash,
+      codigoHash: codigo_hash,
     },
     orderBy: {
       creadoEn: "desc",
@@ -358,12 +359,12 @@ export const findUserByActiveSessionTokenForSocialLink = async (
 
 export const findSocialLinkByProviderAndExternalId = async (
   proveedor: string,
-  idExterno: string,
+  idExterno: string, // era: id_externo
 ) => {
   return await prisma.autenticacion_social.findFirst({
     where: {
       proveedor,
-      idExterno,
+      idExterno, // era: id_externo
       activo: true,
     },
   });
@@ -385,18 +386,18 @@ export const findSocialLinkByUserAndProvider = async (
 export const createSocialLink = async ({
   usuarioId,
   proveedor,
-  idExterno,
-  correoProveedor,
+  idExterno,       // era: id_externo
+  correoProveedor, // era: correo_proveedor
 }: {
   usuarioId: number;
   proveedor: string;
-  idExterno: string;
-  correoProveedor?: string | null;
+  idExterno: string;        // era: id_externo
+  correoProveedor?: string | null; // era: correo_proveedor
 }) => {
   const existingLink = await prisma.autenticacion_social.findFirst({
     where: {
       proveedor,
-      idExterno,
+      idExterno, // era: id_externo
     },
   });
 
@@ -407,7 +408,7 @@ export const createSocialLink = async ({
       },
       data: {
         usuarioId,
-        correoProveedor: correoProveedor ?? null,
+        correoProveedor: correoProveedor ?? null, // era: correo_proveedor
         activo: true,
         vinculadoEn: new Date(),
         ultimo_uso_en: new Date(),
@@ -419,10 +420,10 @@ export const createSocialLink = async ({
     data: {
       usuarioId,
       proveedor,
-      idExterno,
-      correoProveedor: correoProveedor ?? null,
+      idExterno,                           // era: variable no declarada
+      correoProveedor: correoProveedor ?? null, // era: correo_proveedor
       activo: true,
-      vinculadoEn: new Date(),
+      vinculadoEn: new Date(),             // era: vinculado_en
       ultimo_uso_en: new Date(),
     },
   });
@@ -493,6 +494,7 @@ export const invalidateOtherUserSessions = async (
     data: { estado: false },
   });
 };
+
 export const completeTourByUserId = async (id: number) => {
   return await prisma.usuario.update({
     where: { id },
@@ -545,7 +547,7 @@ export const invalidateActiveMagicLinksByUserId = async (usuarioId: number) => {
       activo = false,
       invalidado_en = NOW(),
       ultimo_reenvio_en = NOW()
-    WHERE usuario_id = ${usuarioId}
+    WHERE usuarioId = ${usuarioId}
       AND activo = true
       AND usado_en IS NULL
       AND invalidado_en IS NULL
@@ -568,19 +570,19 @@ export const createMagicLink = async ({
   usuarioId,
   tokenHash,
   correo,
-  expiraEn,
+  expira_en,
 }: {
   usuarioId: number;
   tokenHash: string;
   correo: string;
-  expiraEn: Date;
+  expira_en: Date;
 }) => {
   return await prisma.magic_link.create({
     data: {
       usuario_id: usuarioId,
       token_hash: tokenHash,
       correo,
-      expira_en: expiraEn,
+      expira_en: expira_en,
       activo: true,
       intentos_reenvio: 0,
     },
@@ -589,7 +591,7 @@ export const createMagicLink = async ({
 
 type MagicLinkRecord = {
   id: number;
-  usuario_id: number;
+  usuarioId: number;
   token_hash: string;
   correo: string;
   expira_en: Date;
@@ -602,7 +604,7 @@ export const findMagicLinkByTokenHash = async (tokenHash: string) => {
   const rows = await prisma.$queryRaw<MagicLinkRecord[]>`
     SELECT
       id,
-      usuario_id,
+      usuarioId,
       token_hash,
       correo,
       expira_en,

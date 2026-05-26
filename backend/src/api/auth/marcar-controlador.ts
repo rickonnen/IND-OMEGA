@@ -19,7 +19,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(403).json({ message: "Esta cuenta está desactivada" });
 
     await prisma.usuario.update({
-      where: { id: session.usuario.id },
+      where: { id: session.usuarioId },
       data: { controlador: true },
     });
 
@@ -30,3 +30,4 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
   }
 }
+

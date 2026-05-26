@@ -31,7 +31,7 @@ export const publicacionesService = {
         ? {
             id: suscripcion.id,
             planNombre: suscripcion.plan_suscripcion?.nombre_plan,
-            fechaInicio: suscripcion.fecha_inicio,
+            fecha_inicio: suscripcion.fecha_inicio,
             fechaFin: suscripcion.fecha_fin
           }
         : null
@@ -47,7 +47,7 @@ export const publicacionesService = {
       throw new Error('LIMIT_REACHED')
     }
 
-    return publicacionesRepository.create(userId, data as Omit<publicacion, 'id' | 'usuario_id'>)
+    return publicacionesRepository.create(userId, data as Omit<publicacion, 'id' | 'usuarioId'>)
   },
 
   async validarFlujo(userId: number): Promise<string> {
@@ -123,3 +123,4 @@ export const publicacionesService = {
     }
   }
 }
+

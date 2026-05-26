@@ -19,7 +19,7 @@ export class RecomendacionesRepository {
             categoria: true,
             precio: true,
             superficie_m2: true,
-            ubicacion_inmueble: {
+            ubicacion: {
               select: { zona: true, ciudad: true }
             }
           }
@@ -65,8 +65,7 @@ export class RecomendacionesRepository {
       where: { usuarioId },
       include: {
         inmueble: {
-          include: {
-            publicacion: true
+          include: { publicaciones: true
           }
         }
       },
@@ -81,9 +80,8 @@ export class RecomendacionesRepository {
       where: {
         estado: 'ACTIVO'
       },
-      include: {
-        publicacion: true,
-        ubicacion_inmueble: {
+      include: { publicaciones: true,
+        ubicacion: {
           select: { zona: true, ciudad: true }
         }
       },
@@ -96,13 +94,12 @@ export class RecomendacionesRepository {
     return await prisma.inmueble.findMany({
       where: {
         estado: 'ACTIVO',
-        ubicacion_inmueble: {
+        ubicacion: {
           zona: { contains: zona, mode: 'insensitive' }
         }
       },
-      include: {
-        publicacion: true,
-        ubicacion_inmueble: {
+      include: { publicaciones: true,
+        ubicacion: {
           select: { zona: true, ciudad: true }
         }
       },
@@ -113,7 +110,7 @@ export class RecomendacionesRepository {
   async getInmueblesPopulares(limit: number = 50, zona?: string) {
     const whereClause: any = { estado: 'ACTIVO' }
     if (zona) {
-      whereClause.ubicacion_inmueble = { zona: { contains: zona, mode: 'insensitive' } }
+      whereClause.ubicacion = { zona: { contains: zona, mode: 'insensitive' } }
     }
 
     const inmueblesConVisitas = await prisma.propiedad_vista.groupBy({
@@ -127,9 +124,8 @@ export class RecomendacionesRepository {
 
     return await prisma.inmueble.findMany({
       where: { id: { in: ids } },
-      include: {
-        publicacion: true,
-        ubicacion_inmueble: {
+      include: { publicaciones: true,
+        ubicacion: {
           select: { zona: true, ciudad: true }
         }
       }
@@ -168,13 +164,12 @@ export class RecomendacionesRepository {
       where: {
         id: { in: idsFinales },
         estado: 'ACTIVO',
-        ubicacion_inmueble: {
+        ubicacion: {
           zona: { contains: zona, mode: 'insensitive' }
         }
       },
-      include: {
-        publicacion: true,
-        ubicacion_inmueble: {
+      include: { publicaciones: true,
+        ubicacion: {
           select: { zona: true, ciudad: true }
         }
       },
@@ -197,12 +192,12 @@ export class RecomendacionesRepository {
         id: { in: ids },
         estado: 'ACTIVO'
       },
-      include: {
-        publicacion: true,
-        ubicacion_inmueble: {
+      include: { publicaciones: true,
+        ubicacion: {
           select: { zona: true, ciudad: true }
         }
       }
     })
   }
 }
+

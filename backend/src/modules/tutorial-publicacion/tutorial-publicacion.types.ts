@@ -34,3 +34,4 @@ export type ConfirmTutorialResult = {
   confirmado: boolean;
   confirmadoEn: string | null;
 };
+

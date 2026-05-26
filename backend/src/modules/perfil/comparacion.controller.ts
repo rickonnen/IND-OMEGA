@@ -18,8 +18,7 @@ export const comparacionController = {
           detalle_comparacion: {
             include: {
               inmueble: {
-                include: {
-                  ubicacion_inmueble: true
+                include: { ubicacion: true
                 }
               }
             },
@@ -42,8 +41,8 @@ export const comparacionController = {
           id: detalle.inmueble.id,
           titulo: detalle.inmueble.titulo,
           ubicacion:
-            detalle.inmueble.ubicacion_inmueble?.zona ||
-            detalle.inmueble.ubicacion_inmueble?.ciudad ||
+            detalle.inmueble.ubicacion?.zona ||
+            detalle.inmueble.ubicacion?.ciudad ||
             'Ubicación no disponible',
           precio: detalle.inmueble.precio,
           superficie: detalle.inmueble.superficie_m2,
@@ -81,8 +80,7 @@ export const comparacionController = {
           detalle_comparacion: {
             include: {
               inmueble: {
-                include: {
-                  ubicacion_inmueble: true
+                include: { ubicacion: true
                 }
               }
             },
@@ -322,8 +320,7 @@ export const comparacionController = {
           detalle_comparacion: {
             include: {
               inmueble: {
-                include: {
-                  ubicacion_inmueble: true
+                include: { ubicacion: true
                 }
               }
             },
@@ -359,8 +356,7 @@ export const comparacionController = {
           detalle_comparacion: {
             include: {
               inmueble: {
-                include: {
-                  ubicacion_inmueble: true
+                include: { ubicacion: true
                 }
               }
             }
@@ -391,8 +387,8 @@ export const comparacionController = {
             propiedades: comp.detalle_comparacion.map((detalle) => ({
               id: detalle.inmueble.id,
               ubicacion:
-                detalle.inmueble.ubicacion_inmueble?.zona ||
-                detalle.inmueble.ubicacion_inmueble?.ciudad ||
+                detalle.inmueble.ubicacion?.zona ||
+                detalle.inmueble.ubicacion?.ciudad ||
                 'Ubicación no disponible',
               precio: detalle.inmueble.precio,
               superficie: detalle.inmueble.superficie_m2,
@@ -419,3 +415,4 @@ export const comparacionController = {
     }
   }
 }
+

@@ -37,7 +37,7 @@ export const findUserByFacebookEmail = async (correo: string) => {
 export const createFacebookUser = async (
   data: CreateFacebookUserInput,
   facebookId: string,
-  correoProveedor: string
+  correo_proveedor: string
 ) => {
   const user = await createUser({
     nombre: data.nombre,
@@ -51,7 +51,7 @@ export const createFacebookUser = async (
       usuarioId: user.id,
       proveedor: 'facebook',
       idExterno: facebookId,
-      correoProveedor,
+      correoProveedor: correo_proveedor,
       activo: true
     }
   })
@@ -62,14 +62,14 @@ export const createFacebookUser = async (
 export const linkFacebookToUser = async (
   usuarioId: number,
   facebookId: string,
-  correoProveedor: string | null
+  correo_proveedor: string | null
 ) => {
   return await prisma.autenticacion_social.create({
     data: {
       usuarioId,
       proveedor: 'facebook',
       idExterno: facebookId,
-      correoProveedor,
+      correoProveedor: correo_proveedor,
       activo: true
     }
   })
@@ -78,16 +78,16 @@ export const linkFacebookToUser = async (
 export const createFacebookSession = async ({
   token,
   usuarioId,
-  fechaExpiracion
+  fecha_expiracion
 }: {
   token: string
   usuarioId: number
-  fechaExpiracion: Date
+  fecha_expiracion: Date
 }) => {
   return await createSession({
     token,
     usuarioId,
-    fechaExpiracion
+    fechaExpiracion: fecha_expiracion
   })
 }
 
@@ -102,17 +102,17 @@ export const findFacebookLinkByUserId = async (usuarioId: number) => {
 export const createFacebookLinkForUser = async ({
   usuarioId,
   facebookId,
-  correoProveedor
+  correo_proveedor
 }: {
   usuarioId: number
   facebookId: string
-  correoProveedor?: string | null
+  correo_proveedor?: string | null
 }) => {
   return await createSocialLink({
     usuarioId,
     proveedor: 'facebook',
     idExterno: facebookId,
-    correoProveedor
+    correoProveedor: correo_proveedor
   })
 }
 

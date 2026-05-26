@@ -52,3 +52,4 @@ export async function obtenerTransaccion(transaccionId: number) {
     include: { plan_suscripcion: true },
   });
 }
+

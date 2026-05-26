@@ -38,7 +38,7 @@ export const findUserByGoogleEmail = async (correo: string) => {
 export const createGoogleUser = async (
   data: CreateGoogleUserInput,
   googleId: string,
-  correoProveedor: string
+  correo_proveedor: string
 ) => {
   return await prisma.$transaction(async (tx) => {
     const rol = await tx.rol.upsert({
@@ -62,7 +62,7 @@ export const createGoogleUser = async (
         usuarioId: user.id,
         proveedor: 'google',
         idExterno: googleId,
-        correoProveedor,
+        correoProveedor: correo_proveedor,
         activo: true
       }
     })
@@ -74,29 +74,29 @@ export const createGoogleUser = async (
 export const linkGoogleToUser = async (
   usuarioId: number,
   googleId: string,
-  correoProveedor: string
+  correo_proveedor: string
 ) => {
   return await createSocialLink({
     usuarioId,
     proveedor: 'google',
     idExterno: googleId,
-    correoProveedor
+    correoProveedor: correo_proveedor
   })
 }
 
 export const createGoogleSession = async ({
   token,
   usuarioId,
-  fechaExpiracion
+  fecha_expiracion
 }: {
   token: string
   usuarioId: number
-  fechaExpiracion: Date
+  fecha_expiracion: Date
 }) => {
   return await createSession({
     token,
     usuarioId,
-    fechaExpiracion
+    fechaExpiracion: fecha_expiracion
   })
 }
 
@@ -111,17 +111,17 @@ export const findGoogleLinkByUserId = async (usuarioId: number) => {
 export const createGoogleLinkForUser = async ({
   usuarioId,
   googleId,
-  correoProveedor
+  correo_proveedor
 }: {
   usuarioId: number
   googleId: string
-  correoProveedor?: string | null
+  correo_proveedor?: string | null
 }) => {
   return await createSocialLink({
     usuarioId,
     proveedor: 'google',
     idExterno: googleId,
-    correoProveedor
+    correoProveedor: correo_proveedor
   })
 }
 
@@ -142,3 +142,4 @@ export const updateGoogleLastUsage = async (usuarioId: number, googleId: string)
     }
   })
 }
+

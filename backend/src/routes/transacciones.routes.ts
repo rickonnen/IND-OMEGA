@@ -16,3 +16,4 @@ router.patch("/:id/estado", actualizarEstadoPago);
 router.get("/:id/estado", consultarEstadoPago);
 
 export default router;
+

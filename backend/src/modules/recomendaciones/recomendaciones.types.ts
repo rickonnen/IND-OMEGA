@@ -4,7 +4,7 @@ export interface InmuebleConScore {
   precio: number
   superficie_m2: number | null
   categoria: string | null
-  ubicacion_inmueble: {
+  ubicacion: {
     zona: string | null
     ciudad: string | null
   } | null
@@ -61,3 +61,4 @@ export interface SimilaridadFuerte {
   rangoPrecioCercano: boolean // precio dentro del ±20% respecto a un favorito
   rangoSuperficieCercano: boolean // superficie dentro del ±20% respecto a un favorito
 }
+

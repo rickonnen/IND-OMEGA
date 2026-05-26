@@ -181,3 +181,4 @@ export const archiveNotificationRepository = async ({
     data: { archivada: true },
   });
 };
+

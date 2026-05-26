@@ -23,3 +23,4 @@ export class TelemetriaService {
     return await this.repository.obtenerInmueblesRecomendados(usuarioId)
   }
 }
+
