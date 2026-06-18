@@ -1,88 +1,130 @@
-# 📦 Next.js TSX DevOps Stress Lab
+# 🏠 PropBol
 
-Proyecto base para **simulaciones de estrés DevOps**. Incluye:
+## 📌 Descripción General
 
-* Frontend y Backend en **Next.js + TSX** (App Router)
-* API REST simple (`/api/calculator`)
-* Tests con **Bun**
-* Docker para contenedores
-* Scripts de desarrollo y CI/CD listos para pipelines
+**PropBol** es una plataforma web enfocada en la **compra, venta y gestión de inmuebles** en Bolivia.
 
-Este proyecto permite simular: fallos en pipelines, tests rotos, conflictos de merge y despliegues fallidos.
+Permite a los usuarios:
 
----
+* Publicar propiedades (casas, departamentos, terrenos)
+* Explorar listados disponibles
+* Gestionar información de usuarios
+* Autenticarse y operar de forma segura
 
-## 🗂 Estructura del repositorio
-
-```
-nextjs-stress-lab/
-├── app/
-│   ├── api/calculator/route.ts   # API REST
-│   ├── page.tsx                  # Página principal
-│   └── layout.tsx                # Layout obligatorio
-├── tests/
-│   └── calculator.test.ts        # Tests de funciones
-├── Dockerfile
-├── package.json
-├── bun.lockb
-├── tsconfig.json
-└── .github/workflows/ci.yml      # Pipeline CI/CD
-```
+El sistema está diseñado bajo una arquitectura moderna, escalable y desacoplada.
 
 ---
 
-## ⚡ Requisitos
+## 🧱 Arquitectura
 
-* **Bun** (v1.3+) → [https://bun.sh](https://bun.sh)
+El proyecto sigue un enfoque **monorepo** con separación clara por capas:
+
+* **Frontend** → Next.js (App Router + TypeScript)
+* **Backend** → API REST (Node.js + TypeScript)
+* **Infraestructura** → Docker + CI/CD (GitHub Actions)
+
+---
+
+## 📂 Estructura del Proyecto
+
+```bash
+.
+├── backend/      # API (lógica de negocio, autenticación, usuarios, propiedades)
+├── frontend/     # Aplicación web (UI + interacción con el usuario)
+├── infra/        # herramientas de testing y entornos de prueba
+├── scripts/      # utilidades (stress testing, simulación, etc.)
+└── .github/      # pipelines CI/CD
+```
+
+---
+
+## ⚙️ Requisitos
+
+* Node.js >= 18
+* pnpm
 * Git
-* Docker (opcional para pruebas de despliegue)
+* Docker (opcional)
 
-> No necesitas Node.js, Bun reemplaza todo.
+Instalar pnpm:
+
+```bash
+npm install -g pnpm
+```
 
 ---
 
-## 🚀 Comandos principales
+## 🚀 Ejecución Local
 
-| Acción                | Comando Bun         |
-| --------------------- | ------------------- |
-| Levantar dev server   | `bun run dev`       |
-| Build de producción   | `bun run build`     |
-| Start de producción   | `bun run start`     |
-| Correr tests          | `bun test`          |
-| Instalar dependencias | `bun install`       |
-| Agregar dependencia   | `bun add <package>` |
+### 1. Clonar el repositorio
+
+```bash
+git clone <repo-url>
+cd <repo>
+```
 
 ---
 
-## 🧪 API Example
+### 2. Instalar dependencias
 
-**Sumar 2 números**:
-
+```bash
+pnpm install
 ```
-GET /api/calculator?a=10&b=2&op=add
-```
-
-**Respuesta:**
-
-```json
-{ "result": 12 }
-```
-
-**División:**
-
-```
-GET /api/calculator?a=10&b=2&op=divide
-```
-
-> Maneja errores: divide por 0 o números inválidos → status 400
 
 ---
 
-## 🛠 Estructura de pruebas para DevOps
+### 3. Configurar variables de entorno
 
-* **DevOps 1**: Infraestructura y Docker, simular despliegues y caídas de servicios
-* **DevOps 2**: Pipelines y tests, inyectar tests rotos o builds fallidos
-* **DevOps 3**: Repositorio y monitoreo, crear PR con conflictos y revisar alertas
+Crear archivo:
+
+```bash
+backend/.env
+```
+
+Ejemplo:
+
+```env
+PORT=5000
+JWT_SECRET=your_secret_key
+DATABASE_URL=your_database_url
+```
+
+---
+
+### 4. Ejecutar Backend
+
+```bash
+pnpm --filter backend dev
+```
+
+Disponible en:
+
+```bash
+http://localhost:5000
+```
+
+---
+
+### 5. Ejecutar Frontend
+
+En otra terminal:
+
+```bash
+pnpm --filter frontend dev
+```
+
+Disponible en:
+
+```bash
+http://localhost:3000
+```
+
+---
+
+### 6. Ejecutar todo (monorepo)
+
+```bash
+pnpm dev
+```
 
 ---
 
@@ -91,20 +133,83 @@ GET /api/calculator?a=10&b=2&op=divide
 Levantar contenedor de desarrollo:
 
 ```bash
-docker build -t nextjs-stress-lab .
-docker run -p 3000:3000 nextjs-stress-lab
+docker-compose up --build
 ```
-
-* Acceder a `http://localhost:3000/`
-* API: `http://localhost:3000/api/calculator`
 
 ---
 
-## ✅ Notas finales
+## 🔄 Scripts principales
 
-* Usa `bun test` para todos los tests; no es necesario configurar Jest manualmente
-* Toda la lógica de API está en `app/api/calculator/route.ts`
-* Layout obligatorio en `app/layout.tsx` para evitar errores de Next.js con App Router
+| Acción           | Comando                      |
+| ---------------- | ---------------------------- |
+| Instalar deps    | `pnpm install`               |
+| Dev (todo)       | `pnpm dev`                   |
+| Backend dev      | `pnpm --filter backend dev`  |
+| Frontend dev     | `pnpm --filter frontend dev` |
+| Build            | `pnpm build`                 |
+| Start producción | `pnpm start`                 |
 
-> Este repositorio sirve como **base para construir escenarios de estrés realistas para el equipo de DevOps**.
+---
+
+## 🌿 Flujo de Trabajo
+
+* `main` → producción
+* `develop` → integración
+
+### Convención de commits
+
+```bash
+feat: nueva funcionalidad
+fix: corrección de errores
+chore: tareas internas
+```
+
+---
+
+## 📦 Buenas Prácticas
+
+* No subir archivos `.env`
+* No modificar configuraciones críticas sin aprobación
+* Mantener commits pequeños (máx. ~250 líneas)
+* Seguir arquitectura por capas en backend
+* Separar lógica y UI en frontend
+
+---
+
+## 🔐 Seguridad
+
+* No hardcodear credenciales
+* Uso obligatorio de variables de entorno
+* Revisar scripts antes de ejecutarlos (`/scripts`)
+
+---
+
+## 🚧 Estado del Proyecto
+
+En desarrollo activo.
+
+---
+
+## 🎯 Objetivo del Proyecto
+
+Construir una plataforma robusta y escalable que facilite el mercado inmobiliario en Bolivia, permitiendo:
+
+* Mayor visibilidad de propiedades
+* Gestión eficiente de usuarios
+* Experiencia moderna y rápida
+
+---
+
+## 👥 Contribución
+
+1. Crear una rama desde `develop`
+   `feature/nombre_HU`
+2. Implementar cambios siguiendo estándares
+3. Abrir un Pull Request
+
+---
+
+## 📄 Licencia
+
+Pendiente de definición.
 
